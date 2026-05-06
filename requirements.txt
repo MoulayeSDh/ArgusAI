@@ -1,8 +1,6 @@
 # ArgusAI v0.1.0-beta core dependencies.
 #
-# Optional extras:
-# - pip install ".[web]"    # Crawl4AI URL crawling
-# - pip install ".[surya]"  # experimental Surya OCR backend
+#
 
 requests>=2.32,<3.0
 art>=6.4,<7.0

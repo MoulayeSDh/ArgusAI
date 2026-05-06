@@ -5,25 +5,28 @@
 ![Status](https://img.shields.io/badge/Status-v0.1.0--beta-orange)
 ![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-red)
 
-ArgusAI is a local-first multimodal agentic AI assistant for local models, local semantic memory, OCR, document analysis, artifact generation, and optional explicit URL crawling.
+ArgusAI is a local-first multimodal agentic AI assistant built around local models, local semantic memory, OCR, document analysis, artifact generation, general web search, and optional explicit URL scraping.
 
-The project is built for developers, researchers, and ML engineers who want more control over their local AI stack.
+It is designed for developers, researchers, and ML engineers who want a controllable local AI stack instead of a cloud-first assistant.
 
 ## Status
 
 Current version: `v0.1.0-beta`
 
-This is an early beta. The current focus is:
+This beta already includes:
 
-- Local LLM inference with Ollama
-- Optional long-term semantic memory with Qdrant
-- Image and document OCR
-- PDF and document text extraction
-- Optional URL crawling with Crawl4AI
+- Local LLM inference through Ollama
+- Local semantic memory through Qdrant and LlamaIndex
+- Short-term conversation memory
+- Image OCR and document OCR
+- PDF and text document extraction
+- General web search through `ddgs`
+- Explicit URL scraping through Crawl4AI
 - CLI-first interaction
 - Docker Compose deployment
 - JSONL execution traces
-- Basic artifact generation and validation
+- Artifact generation and validation
+- Basic pytest coverage for routing, OCR fallback, Ollama JSON, web tools, and Qdrant compatibility
 
 ## Repository Structure
 
@@ -41,9 +44,11 @@ ArgusAI/
 |       |-- memory.py
 |       |-- ocr.py
 |       |-- documents.py
+|       |-- search.py
 |       |-- web.py
 |       |-- artifacts.py
 |       `-- utils.py
+|-- tests/
 |-- docker/
 |   `-- Dockerfile
 |-- docker-compose.yml
@@ -66,7 +71,7 @@ User input
 -> tool execution
 -> draft generation
 -> judge evaluation
--> optional improvement or re-routing
+-> optional re-routing or improvement
 -> final answer
 -> artifact generation
 -> memory write
@@ -83,7 +88,8 @@ Main components:
 | `memory.py` | Qdrant and LlamaIndex semantic memory |
 | `ocr.py` | OCR backend management |
 | `documents.py` | PDF, document, and image loading |
-| `web.py` | Optional explicit URL crawling |
+| `search.py` | General web search with `ddgs` |
+| `web.py` | Optional explicit URL scraping with Crawl4AI |
 | `artifacts.py` | File generation and validation |
 | `utils.py` | Shared utilities, logging, and traces |
 
@@ -101,16 +107,15 @@ embedding_model     = qwen3-embedding:latest
 
 You can override these model tags with CLI arguments or environment variables.
 
-## Installation
-
-### Docker Compose
+## Docker Compose Usage
 
 Prerequisites:
 
 - Docker and Docker Compose
-- Ollama running on the host machine
+- Ollama installed and running on the host machine
+- Required Ollama models pulled locally
 
-Start Ollama:
+Start Ollama on the host:
 
 ```bash
 ollama serve
@@ -126,10 +131,16 @@ ollama pull qwen2.5-coder:7b
 ollama pull qwen3-embedding:latest
 ```
 
-Start ArgusAI and Qdrant:
+Build and start ArgusAI with Qdrant:
 
 ```bash
 docker compose up --build
+```
+
+For an interactive CLI session, this is often cleaner:
+
+```bash
+docker compose run --rm argusai
 ```
 
 Qdrant runs inside Docker Compose. Ollama is expected on the host at:
@@ -140,7 +151,7 @@ http://host.docker.internal:11434
 
 The compose file includes `host-gateway` support for Linux Docker hosts.
 
-### Local Development
+## Local Development
 
 Create and activate a virtual environment:
 
@@ -160,19 +171,11 @@ Linux/macOS:
 source .venv/bin/activate
 ```
 
-Install the core dependencies and editable package:
+Install dependencies and the editable package:
 
 ```bash
 pip install -r requirements.txt
 pip install -e .
-```
-
-Optional extras:
-
-```bash
-pip install -e ".[web]"
-pip install -e ".[surya]"
-pip install -e ".[dev]"
 ```
 
 Run ArgusAI:
@@ -189,7 +192,7 @@ python -m argusai.main
 
 ## Diagnostics
 
-Run a lightweight smoke check without launching the interactive agent:
+Run a lightweight startup check:
 
 ```bash
 argusai doctor
@@ -201,14 +204,33 @@ Equivalent:
 argusai --status-only
 ```
 
-The diagnostic reports dependency availability, runtime output directories, Ollama reachability, and Qdrant reachability. Missing Ollama or Qdrant services are warnings because they may be started separately.
+The diagnostic reports dependency availability, output directories, Ollama reachability, Qdrant reachability, OCR runtime status, and optional tool status.
+
+## Tests
+
+Run the developer test suite:
+
+```bash
+pip install -e .
+pip install pytest
+pytest -q
+```
+
+The current tests cover:
+
+- Router contracts
+- Web search and URL scraping tool behavior
+- Ollama JSON response contract
+- OCR fallback behavior
+- Qdrant/LlamaIndex compatibility detection
+- Minimal pipeline handling for web search routes
 
 ## CLI Commands
 
 ```text
 /image <path>   Analyze an image
 /doc <path>     Analyze a document
-/web on|off     Enable or disable web access
+/web on|off     Arm or disable web access
 /history        Show recent conversation history
 /status         Show runtime status
 /clear          Clear the terminal screen
@@ -230,16 +252,22 @@ Analyze a document:
 /doc examples/document.pdf
 ```
 
-Enable web crawling:
+Enable web tools:
 
 ```text
 /web on
 ```
 
-Ask a normal reasoning question:
+Ask a current-information question:
 
 ```text
-Explain the role of Qdrant in ArgusAI.
+What is the latest stable Python version?
+```
+
+Scrape a specific URL:
+
+```text
+Summarize this page: https://example.com
 ```
 
 Generate a file:
@@ -263,26 +291,35 @@ outputs/logs/argusai.log
 outputs/traces/runs.jsonl
 ```
 
-Execution traces include metadata such as route, tools called, memory status, judge score, latency, artifact status, and errors.
+Execution traces include route, tools called, memory status, judge score, latency, artifact status, and errors.
 
 ## Web Access Policy
 
 Web access is disabled by default.
 
-In `v0.1.0-beta`, ArgusAI only supports crawling explicit URLs:
+When enabled with `/web on`, ArgusAI still asks for confirmation before internet access is used.
+
+Two web paths exist:
 
 ```text
-Summarize this page: https://example.com
+web_search  -> general search through ddgs
+web_scrape  -> explicit URL/page scraping through Crawl4AI
 ```
 
-General web search is not implemented yet.
+ArgusAI should not use Crawl4AI for general search. Crawl4AI is reserved for explicit URLs.
 
 ## OCR Notes
 
 Default OCR backend:
 
 ```text
-pytesseract
+pytesseract + Tesseract runtime
+```
+
+Docker includes Tesseract runtime. On Windows, you may need to install Tesseract manually and set the binary path:
+
+```powershell
+argusai --tesseract-cmd "C:\Program Files\Tesseract-OCR\tesseract.exe"
 ```
 
 Experimental backend:
@@ -291,21 +328,38 @@ Experimental backend:
 surya-ocr
 ```
 
-Install Surya support with `pip install -e ".[surya]"`. Surya remains disabled by default because its Python API may change across versions.
+Surya remains disabled by default because its Python API changes frequently. ArgusAI uses it defensively as a best-effort fallback when enabled or when Tesseract is unavailable and auto-fallback is active.
 
-OCR on scanned PDFs is limited by default to the first few pages for beta stability.
+## Troubleshooting
+
+If startup fails with missing Ollama models, pull the model tags shown in the error message:
+
+```bash
+ollama pull <model-tag>
+```
+
+If memory is off, verify Qdrant:
+
+```bash
+curl http://localhost:6333/collections
+```
+
+If Docker cannot reach Ollama, verify that Ollama is running on the host and reachable from the container through:
+
+```text
+http://host.docker.internal:11434
+```
+
+If OCR is unavailable locally on Windows, install the Tesseract runtime and pass `--tesseract-cmd`.
 
 ## Current Limitations
 
-- General web search is not implemented yet.
-- Web crawling requires explicit URLs.
-- OCR quality depends on the local OCR backend.
-- OCR on scanned PDFs is limited by default.
-- Surya OCR is experimental.
 - Model availability depends on local Ollama tags.
-- Docker image is intended for local-first usage, not hardened production deployment.
-- Benchmarks and evaluation suites are not yet included.
-- The judge model improves quality, but external evals are not yet implemented.
+- OCR quality depends on the OCR backend and installed language data.
+- OCR on scanned PDFs is limited by default for beta stability.
+- Surya OCR is experimental.
+- Docker image is local-first and developer-oriented, not hardened production infrastructure.
+- The judge model improves answer quality, but external benchmark suites are not yet included.
 
 ## Roadmap
 
@@ -314,10 +368,9 @@ OCR on scanned PDFs is limited by default to the first few pages for beta stabil
 - RAG retrieval evaluation
 - Better artifact validators
 - Optional local Qdrant launcher scripts
-- More robust web search tool
 - CI/CD with GitHub Actions
-- Optional modular expansion into `tools/`, `llm`, `memory`, and `evaluation`
 - More structured agent trajectory evaluation
+- Optional modular expansion into `tools/`, `llm`, `memory`, and `evaluation`
 
 ## License
 

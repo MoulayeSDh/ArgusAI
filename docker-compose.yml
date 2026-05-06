@@ -7,11 +7,6 @@ services:
       - "6334:6334"
     volumes:
       - argusai_qdrant_data:/qdrant/storage
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:6333/collections"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     restart: unless-stopped
 
   argusai:
@@ -20,13 +15,19 @@ services:
       dockerfile: docker/Dockerfile
     container_name: argusai-app
     depends_on:
-      qdrant:
-        condition: service_healthy
+      - qdrant
     environment:
       ARGUSAI_QDRANT_URL: "http://qdrant:6333"
       ARGUSAI_OLLAMA_URL: "http://host.docker.internal:11434"
       ARGUSAI_ARTIFACTS_DIR: "/app/outputs"
       ARGUSAI_QDRANT_COLLECTION: "argusai_v2_memory"
+      ARGUSAI_ROUTER_MODEL: "qwen3-vl:8b"
+      ARGUSAI_REASONING_MODEL: "deepseek-r1:8b"
+      ARGUSAI_JUDGE_MODEL: "qwen3.5:9b"
+      ARGUSAI_CODER_MODEL: "qwen2.5-coder:7b"
+      ARGUSAI_EMBEDDING_MODEL: "qwen3-embedding:latest"
+      ARGUSAI_TESSERACT_CMD: "/usr/bin/tesseract"
+      ARGUSAI_LOG_LEVEL: "INFO"
       PYTHONUTF8: "1"
       PYTHONIOENCODING: "utf-8"
       LANG: "C.UTF-8"
@@ -37,7 +38,10 @@ services:
       - ./outputs:/app/outputs
     stdin_open: true
     tty: true
-    command: ["argusai", "--no-memory-prompt", "--request-timeout", "800"]
+    command: >
+      sh -c "until curl -sf http://qdrant:6333/collections >/dev/null; do
+      echo 'Waiting for Qdrant...'; sleep 2; done;
+      exec argusai --no-memory-prompt --request-timeout 800"
     restart: "no"
 
 volumes:
