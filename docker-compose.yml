@@ -1,0 +1,44 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.13.4
+    container_name: argusai-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - argusai_qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/collections"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  argusai:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: argusai-app
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    environment:
+      ARGUSAI_QDRANT_URL: "http://qdrant:6333"
+      ARGUSAI_OLLAMA_URL: "http://host.docker.internal:11434"
+      ARGUSAI_ARTIFACTS_DIR: "/app/outputs"
+      ARGUSAI_QDRANT_COLLECTION: "argusai_v2_memory"
+      PYTHONUTF8: "1"
+      PYTHONIOENCODING: "utf-8"
+      LANG: "C.UTF-8"
+      LC_ALL: "C.UTF-8"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./outputs:/app/outputs
+    stdin_open: true
+    tty: true
+    command: ["argusai", "--no-memory-prompt", "--request-timeout", "800"]
+    restart: "no"
+
+volumes:
+  argusai_qdrant_data:

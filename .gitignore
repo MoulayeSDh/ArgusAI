@@ -1,0 +1,78 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+.argusai_test/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+argusai_env/
+argusai_v2/
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Runtime outputs
+output/
+outputs/
+logs/
+traces/
+*.log
+
+# Local data / artifacts
+data/
+test/
+tmp/
+temp/
+*.tmp
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
+
+# Docker local data
+qdrant_storage/
+qdrant_data/
+
+# Large model files
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+
+# Local documents/images used for testing
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.bmp
+*.tiff

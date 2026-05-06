@@ -1,0 +1,26 @@
+# ArgusAI v0.1.0-beta core dependencies.
+#
+# Optional extras:
+# - pip install ".[web]"    # Crawl4AI URL crawling
+# - pip install ".[surya]"  # experimental Surya OCR backend
+
+requests>=2.32,<3.0
+art>=6.4,<7.0
+
+# OCR / document processing
+pillow>=10.2.0,<11.0.0
+pytesseract>=0.3.13,<0.4
+pypdf>=5.0,<7.0
+pypdfium2>=4.30,<5.0
+PyMuPDF>=1.25,<2.0
+PyYAML>=6.0,<7.0
+# Web tools
+ddgs>=9.0,<10.0
+crawl4ai>=0.8,<0.9
+playwright>=1.59,<2.0
+surya-ocr>=0.13,<0.16
+# Semantic memory / RAG
+qdrant-client>=1.16,<2.0
+llama-index-core>=0.12,<0.14
+llama-index-embeddings-ollama>=0.5,<0.8
+llama-index-vector-stores-qdrant>=0.10,<0.11
