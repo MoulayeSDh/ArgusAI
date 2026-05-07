@@ -1,10 +1,5 @@
 # ArgusAI
 
-[![GitHub Stars](https://img.shields.io/github/stars/MoulayeSDh/ArgusAI?style=social)](https://github.com/MoulayeSDh/ArgusAI/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/MoulayeSDh/ArgusAI?style=social)](https://github.com/MoulayeSDh/ArgusAI/forks)
-[![GitHub Issues](https://img.shields.io/github/issues/MoulayeSDh/ArgusAI)](https://github.com/MoulayeSDh/ArgusAI/issues)
-[![Last Commit](https://img.shields.io/github/last-commit/MoulayeSDh/ArgusAI)](https://github.com/MoulayeSDh/ArgusAI/commits/main)
-[![Release](https://img.shields.io/github/v/release/MoulayeSDh/ArgusAI?include_prereleases)](https://github.com/MoulayeSDh/ArgusAI/releases)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 ![Status](https://img.shields.io/badge/Status-v0.1.0--beta-orange)
