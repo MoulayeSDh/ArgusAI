@@ -1,5 +1,5 @@
-# ArgusAI v0.1.0-beta
-# Local-first multimodal agentic AI assistant
+# ArgusAI v0.1.0-beta full image
+# Local-first multimodal agentic AI assistant with Surya OCR support
 
 FROM python:3.10-bookworm
 
@@ -40,10 +40,10 @@ RUN apt-get update \
 # Python dependencies
 # ---------------------------------------------------------------------
 
-COPY requirements.txt .
+COPY requirements.txt requirements_full.txt ./
 
 RUN python -m pip install --upgrade pip setuptools wheel \
-    && pip install -r requirements.txt
+    && pip install -r requirements_full.txt
 
 # Crawl4AI uses Playwright for URL scraping. Installing Chromium in the image
 # keeps Docker usage self-contained instead of requiring host browser setup.
@@ -59,7 +59,7 @@ COPY README.md .
 COPY src ./src
 
 # Install ArgusAI package without re-resolving dependencies already installed
-# from requirements.txt.
+# from requirements_full.txt.
 RUN pip install --no-deps -e . \
     && python -c "import argusai; print('ArgusAI', argusai.__version__)"
 

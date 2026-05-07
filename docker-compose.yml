@@ -38,10 +38,19 @@ services:
       - ./outputs:/app/outputs
     stdin_open: true
     tty: true
-    command: >
-      sh -c "until curl -sf http://qdrant:6333/collections >/dev/null; do
-      echo 'Waiting for Qdrant...'; sleep 2; done;
-      exec argusai --no-memory-prompt --request-timeout 800"
+    entrypoint:
+      - sh
+      - -c
+      - |
+        until curl -sf http://qdrant:6333/collections >/dev/null; do
+          echo 'Waiting for Qdrant...'
+          sleep 2
+        done
+        exec argusai "$@"
+      - argusai
+    command:
+      - "--request-timeout"
+      - "900"
     restart: "no"
 
 volumes:

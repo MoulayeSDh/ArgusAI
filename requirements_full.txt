@@ -1,0 +1,9 @@
+# ArgusAI full dependencies.
+#
+# Includes the standard Docker/CLI dependency set plus Surya OCR.
+# This pulls Torch and related ML packages, so Docker builds are much slower.
+
+-r requirements.txt
+
+# Advanced OCR fallback
+surya-ocr>=0.13,<0.16

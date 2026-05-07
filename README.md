@@ -1,9 +1,14 @@
 # ArgusAI
 
+[![GitHub Stars](https://img.shields.io/github/stars/MoulayeSDh/ArgusAI?style=social)](https://github.com/MoulayeSDh/ArgusAI/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/MoulayeSDh/ArgusAI?style=social)](https://github.com/MoulayeSDh/ArgusAI/forks)
+[![GitHub Issues](https://img.shields.io/github/issues/MoulayeSDh/ArgusAI)](https://github.com/MoulayeSDh/ArgusAI/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/MoulayeSDh/ArgusAI)](https://github.com/MoulayeSDh/ArgusAI/commits/main)
+[![Release](https://img.shields.io/github/v/release/MoulayeSDh/ArgusAI?include_prereleases)](https://github.com/MoulayeSDh/ArgusAI/releases)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 ![Status](https://img.shields.io/badge/Status-v0.1.0--beta-orange)
-![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-red)
+[![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-red)](LICENSE.md)
 
 ArgusAI is a local-first multimodal agentic AI assistant built around local models, local semantic memory, OCR, document analysis, artifact generation, general web search, and optional explicit URL scraping.
 
@@ -379,6 +384,22 @@ This project is source-available under the **PolyForm Noncommercial License 1.0.
 Commercial use is not permitted without explicit written permission from the author.
 
 See [LICENSE.md](LICENSE.md) for the full license text.
+
+## Docker Images
+
+The default Docker image is the recommended user-friendly install path. It uses `requirements.txt`, keeps Crawl4AI scraping support, installs Tesseract in Linux, and does not install Surya OCR. This avoids the heavy Torch/CUDA dependency chain during normal Docker builds.
+
+```bash
+docker compose build argusai
+```
+
+The full Docker image is available for users who explicitly want Surya OCR. It uses `requirements_full.txt`, which includes the standard dependencies plus `surya-ocr`. This build can take much longer because Surya pulls Torch and related ML packages.
+
+```bash
+docker build -f docker/Dockerfile_full -t argusai-full .
+```
+
+Both dependency files pin `qdrant-client==1.13.3` to stay compatible with the default Compose server image `qdrant/qdrant:v1.13.4`.
 
 ## Author
 
