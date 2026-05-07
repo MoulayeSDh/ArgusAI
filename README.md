@@ -1,7 +1,5 @@
 # ArgusAI
 
-[![GitHub Stars](https://img.shields.io/github/stars/MoulayeSDh/ArgusAI?style=social)](https://github.com/MoulayeSDh/ArgusAI/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/MoulayeSDh/ArgusAI?style=social)](https://github.com/MoulayeSDh/ArgusAI/forks)
 [![GitHub Issues](https://img.shields.io/github/issues/MoulayeSDh/ArgusAI)](https://github.com/MoulayeSDh/ArgusAI/issues)
 [![Last Commit](https://img.shields.io/github/last-commit/MoulayeSDh/ArgusAI)](https://github.com/MoulayeSDh/ArgusAI/commits/main)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
