@@ -307,6 +307,18 @@ argusai --tesseract-cmd "C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 Surya OCR is treated as experimental and optional.
 
+## Security Model ⚡️
+
+ArgusAI is local-first by design.
+
+- Web access is disabled by default.
+- URL scraping is disabled by default.
+- Internet access requires explicit user confirmation.
+- Qdrant is intended to run locally or inside a private Docker Compose network.
+- The default Docker Compose setup is for local development, not public server exposure.
+- Do not expose Qdrant ports publicly without authentication.
+
+  
 ## Project Status
 
 Current version:
