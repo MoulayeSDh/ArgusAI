@@ -1,10 +1,18 @@
-# ArgusAI
+<h1 align="center">ArgusAI</h1>
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![Docker](https://img.shields.io/badge/Docker-Ready-blue)
-![Status](https://img.shields.io/badge/Status-v0.1.0--beta-orange)
-[![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-red)](LICENSE.md)
+<p align="center">
+  <strong>Local-first multimodal agentic AI assistant</strong><br>
+  <em>Your models. Your data. Your machine.</em>
+</p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-blue" alt="Python">
+  <img src="https://img.shields.io/badge/Docker-Ready-blue" alt="Docker">
+  <img src="https://img.shields.io/badge/Status-v0.1.0--beta-orange" alt="Status">
+  <a href="LICENSE.md">
+    <img src="https://img.shields.io/badge/License-PolyForm%20Noncommercial-red" alt="License">
+  </a>
+</p>
 **ArgusAI** is a local-first multimodal agentic AI assistant designed for developers, researchers, and ML engineers who want to run powerful AI workflows on their own machine.
 
 It combines local LLMs, semantic memory, OCR, document analysis, web search, URL scraping, code generation, artifact creation, and self-evaluation inside a CLI-first workflow.
