@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/argusai-logo.png" alt="ArgusAI Logo" width="700"/>
+</p>
+
 <h1 align="center">ArgusAI</h1>
 
 <p align="center">
