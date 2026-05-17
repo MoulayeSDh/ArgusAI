@@ -76,3 +76,7 @@ qdrant_data/
 *.webp
 *.bmp
 *.tiff
+
+# README assets
+!assets/
+!assets/*.png

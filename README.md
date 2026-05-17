@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/argusai-logo.png" alt="ArgusAI Logo" width="700"/>
+  <img src="assets/argusai-logo.png" alt="ArgusAI Logo" width="600"/>
 </p>
 
 <h1 align="center">ArgusAI</h1>
