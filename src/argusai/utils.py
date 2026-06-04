@@ -122,6 +122,43 @@ def clean_text(text: str) -> str:
     return text.strip()
 
 
+def has_arabic(text: str) -> bool:
+    """Return True if text contains Arabic script characters."""
+
+    if not isinstance(text, str):
+        return False
+
+    return any(
+        "\u0600" <= char <= "\u06FF"
+        or "\u0750" <= char <= "\u077F"
+        or "\u08A0" <= char <= "\u08FF"
+        for char in text
+    )
+
+
+def format_cli_text(text: str) -> str:
+    """
+    Fix Arabic RTL display only for terminal output.
+
+    Never use this before memory writes, Qdrant ingestion, artifact saving,
+    document exports, prompts, logs, or traces.
+    """
+
+    if not isinstance(text, str):
+        return text
+
+    if not has_arabic(text):
+        return text
+
+    try:
+        import arabic_reshaper  # type: ignore[import-untyped]
+        from bidi.algorithm import get_display  # type: ignore[import-untyped]
+
+        return get_display(arabic_reshaper.reshape(text))
+    except Exception:
+        return text
+
+
 def contains_keywords(text: str, keywords: Iterable[str]) -> bool:
     """Return True if any keyword is present in text."""
 

@@ -12,6 +12,8 @@ pypdf>=5.0,<7.0
 pypdfium2>=4.30,<5.0
 PyMuPDF>=1.25,<2.0
 PyYAML>=6.0,<7.0
+arabic-reshaper>=3.0,<4.0
+python-bidi>=0.6,<1.0
 # Web tools
 ddgs>=9.0,<10.0
 crawl4ai>=0.8,<0.9

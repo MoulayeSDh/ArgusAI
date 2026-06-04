@@ -23,7 +23,7 @@ from typing import Optional
 from . import __app_name__, __version__
 from .agent import ArgusAI
 from .config import Config
-from .utils import Colors
+from .utils import Colors, format_cli_text
 
 
 try:
@@ -224,7 +224,7 @@ def run_cli_loop(agent: ArgusAI) -> None:
                 stream_callback=None,
             )
 
-            print(result["answer"])
+            print(format_cli_text(result["answer"]))
 
         except KeyboardInterrupt:
             print(f"\n{Colors.YELLOW}Interrupted.{Colors.RESET}")
@@ -252,7 +252,7 @@ def show_history(agent: ArgusAI) -> None:
 
         role_color = Colors.GREEN if role == "user" else Colors.CYAN
 
-        print(f"{role_color}{role.capitalize()}:{Colors.RESET} {content}")
+        print(f"{role_color}{role.capitalize()}:{Colors.RESET} {format_cli_text(content)}")
 
 
 def show_status(agent: ArgusAI) -> None:
