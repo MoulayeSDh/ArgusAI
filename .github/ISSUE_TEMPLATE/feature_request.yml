@@ -1,0 +1,38 @@
+name: Feature request
+description: Suggest a useful, local-first ArgusAI improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: "Describe the user outcome. Do not share private documents, credentials, or confidential prompts."
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What task is difficult today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed outcome
+      description: Explain the expected behavior, without prescribing the implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - CLI and usability
+        - Documents and OCR
+        - Local models and routing
+        - Memory and RAG
+        - Web tools
+        - Docker and installation
+        - Documentation
