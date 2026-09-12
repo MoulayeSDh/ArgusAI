@@ -232,9 +232,9 @@ class OCRManager:
         2. Surya if enabled and initialized
         """
 
-        if Image is None:
-            return ""
-
+        # Backends can operate on an image object supplied by a caller even
+        # when Pillow is not importable in this environment. Pillow is only
+        # required by run_ocr_on_image_path when ArgusAI opens a file itself.
         if self.has_tesseract():
             text = self._ocr_with_tesseract(image)
             if text:

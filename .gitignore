@@ -80,3 +80,7 @@ qdrant_data/
 # README assets
 !assets/
 !assets/*.png
+
+# Versioned installation profiles
+!.env.lite.example
+!.env.full.example
